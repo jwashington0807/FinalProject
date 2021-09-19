@@ -1,0 +1,7 @@
+C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\bin\Debug\Project4Prototype.exe
+C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\bin\Debug\Project4Prototype.exe.config
+C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\obj\Debug\Project4Prototype.csproj.CoreCompileInputs.cache
+C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\obj\Debug\Project4Prototype.exe
+C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\obj\Debug\Project4Prototype.pdb
+C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\bin\Debug\Project4Prototype.pdb
+C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\obj\Debug\Project4Prototype.csproj.AssemblyReference.cache
