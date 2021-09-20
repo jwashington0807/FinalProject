@@ -23,7 +23,8 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        int role = 0;
+        string role = String.Empty;
+        bool isAdmin = false;
 
         public MainWindow()
         {
@@ -42,7 +43,16 @@ namespace Client
                 {
                     if (Login())
                     {
-                        Tabs twdw = new Tabs(txtUserName.Text);
+                        if(role == "1")
+                        {
+                            isAdmin = true;
+                        }
+                        else
+                        {
+                            isAdmin = false;
+                        }
+
+                        Tabs twdw = new Tabs(txtUserName.Text, isAdmin);
                         twdw.Show();
                         this.Close();
                     }
@@ -74,7 +84,6 @@ namespace Client
                     else
                     {
                         MessageBox.Show("Your password is incorrect");
-
                         return false;
                     }
                 }

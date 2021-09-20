@@ -68,9 +68,8 @@ namespace Client
                     {
                         foreach (var item in res)
                         {
-                            lstFilesCopy.Items.Add(item);
+                            txtFileLocSearch.Items.Add(item);
                         }
-
                     });
                 }
             });
@@ -93,28 +92,32 @@ namespace Client
             Dispatcher.Invoke(() => {
                 endpointAddress.Content = endpoint;
                 endpointAddress.Visibility = Visibility.Visible;
-                btn_Search.IsEnabled = true;
-                btn_Copy.IsEnabled = true;
-                btn_Download.IsEnabled = true;
+                btn_Copy.IsEnabled = false;
+                btn_Download.IsEnabled = false;
 
             });
         }
 
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
-            //listBox.Items.Clear();
-            currentFile = msgTextBox.Text;
-            WCF_Peer_Comm.FileInfo fi = new WCF_Peer_Comm.FileInfo(msgTextBox.Text, endpointAddress.Content.ToString());
+            txtFileLocSearch.Items.Clear();
+            btn_Download.IsEnabled = true;
+            currentFile = txtSearchCriteria1.Text;
+            WCF_Peer_Comm.FileInfo fi = new WCF_Peer_Comm.FileInfo(txtSearchCriteria1.Text, endpointAddress.Content.ToString());
             channel.Search(fi);
         }
 
         private void btn_Generate_Click(object sender, RoutedEventArgs e)
         {
-            string endpoint = lstFilesCopy.SelectedItem.ToString();
-            
+            DirectoryInfo d = new DirectoryInfo(@"."); //Assuming Test is your Folder
 
-            WCF_Peer_Comm.FileInfo fi = new WCF_Peer_Comm.FileInfo(msgTextBox.Text, endpointAddress.Content.ToString());
-            channel.Search(fi);
+            System.IO.FileInfo[] Files = d.GetFiles(); //Getting Text files
+            foreach (var item in Files)
+            {
+                WCF_Peer_Comm.FileInfo fileInfo = new WCF_Peer_Comm.FileInfo(item.Name, endpointAddress.Content.ToString());
+                channel.NewFile(fileInfo);
+                lstFilesCopy.Items.Add(item.Name);
+            }
         }
 
         private void btn_Copy_Click(object sender, RoutedEventArgs e)
@@ -124,22 +127,22 @@ namespace Client
             System.IO.FileInfo[] Files = d.GetFiles(); //Getting Text files
             foreach (var item in Files)
             {
-                //sharedList.Items.Add("Indexing: " + item.Name);
+                lstFilesCopy.Items.Add("Indexing: " + item.Name);
                 WCF_Peer_Comm.FileInfo fileInfo = new WCF_Peer_Comm.FileInfo(item.Name, endpointAddress.Content.ToString());
                 channel.NewFile(fileInfo);
-                //sharedList.Items.Add("Indexing Compelte for: " + item.Name);
+                lstFilesCopy.Items.Add("Indexing Compelte for: " + item.Name);
             }
         }
 
         private void btn_Download_Click(object sender, RoutedEventArgs e)
         {
-           /* string endpoint = listBox.SelectedItem.ToString();
+            string endpoint = txtFileLocSearch.SelectedItem.ToString();
             EndpointAddress baseAddress = new EndpointAddress(endpoint);
             WSHttpBinding binding = new WSHttpBinding();
             ChannelFactory<IPeerCommunicator> factory
               = new ChannelFactory<IPeerCommunicator>(binding, endpoint);
             IPeerCommunicator p2pchannel = factory.CreateChannel();
             p2pchannel.DownloadRequest(new WCF_Peer_Comm.FileInfo(currentFile, endpointAddress.Content.ToString()));
-        */}
+        }
     }
 }
