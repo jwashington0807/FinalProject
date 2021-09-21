@@ -18,6 +18,9 @@ namespace WCF_Peer_Comm
         [OperationContract]
         void Search(FileInfo fileInfo);
 
+        [OperationContract]
+        string Login(string username, string password);
+
         FileInfo GetMessage();
     }
     [DataContract]

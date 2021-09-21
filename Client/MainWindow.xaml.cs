@@ -25,6 +25,7 @@ namespace Client
     {
         string role = String.Empty;
         bool isAdmin = false;
+        ICommunicator channel;
 
         public MainWindow()
         {
@@ -35,15 +36,34 @@ namespace Client
         {
             try
             {
+                // Set the URL for the .... client?
+                string endpoint = "http://localhost:8080/ICommunicator";
+
+                //From Service Model DLL
+                EndpointAddress baseAddress = new EndpointAddress(endpoint);
+                WSHttpBinding binding = new WSHttpBinding();
+                ChannelFactory<ICommunicator> factory
+                  = new ChannelFactory<ICommunicator>(binding, endpoint);
+                channel = factory.CreateChannel();
+
                 if (String.IsNullOrEmpty(txtUserName.Text) || String.IsNullOrEmpty(txtPassword.Password))
                 {
                     MessageBox.Show("Input can't be blank");
                 }
                 else
                 {
-                    if (Login())
+                    string result = String.Empty;
+
+                    result = channel.Login(txtUserName.Text, txtPassword.Password);
+
+                    if (String.IsNullOrEmpty(result))
                     {
-                        if(role == "1")
+                        MessageBox.Show("The username or password that you have entered is incorrect");
+                    }
+
+                    else
+                    {
+                        if (role == "1")
                         {
                             isAdmin = true;
                         }
@@ -65,7 +85,7 @@ namespace Client
             }
         }
 
-        public bool Login()
+        /*public bool Login()
         {
             string line = String.Empty;
 
@@ -94,6 +114,6 @@ namespace Client
             MessageBox.Show("The username or password that you have entered is incorrect");
 
             return false;
-        }
+        }*/
     }
 }

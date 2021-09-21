@@ -144,5 +144,11 @@ namespace Client
             IPeerCommunicator p2pchannel = factory.CreateChannel();
             p2pchannel.DownloadRequest(new WCF_Peer_Comm.FileInfo(currentFile, endpointAddress.Content.ToString()));
         }
+
+        private void lstFilesCopy_Selected(object sender, RoutedEventArgs e)
+        {
+
+
+        }
     }
 }

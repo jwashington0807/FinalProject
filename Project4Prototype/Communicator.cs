@@ -40,6 +40,33 @@ namespace WCF_Peer_Comm
         static BlockingQueue<FileInfo> searchFileBlockingQ = null;
         static ConcurrentDictionary<string, ConcurrentBag<string>> indexedFiles;
         ServiceHost service = null;
+
+        public string Login(string username, string password)
+        {
+            string line = String.Empty;
+            string role = String.Empty;
+
+            StreamReader file = new StreamReader(@"Administration\passwd.txt");
+            while ((line = file.ReadLine()) != null)
+            {
+                string[] ss = line.Split(':');
+
+                if (username == ss[0])
+                {
+                    if (password == ss[1])
+                    {
+                        role = ss[2];
+                    }
+                }
+            }
+
+            file.Close();
+
+            // MessageBox.Show("The username or password that you have entered is incorrect");
+
+            return role;
+        }
+
         void showAll()
         {
             foreach (var item in indexedFiles.Keys)
@@ -50,8 +77,6 @@ namespace WCF_Peer_Comm
                     Console.WriteLine(e);
                 }
             }
-
-
         }
         private void SendResponse(FileInfo fileInfo, List<string> res) {
             string endpoint = fileInfo.Endpoint;
@@ -161,6 +186,7 @@ namespace WCF_Peer_Comm
             //if (indexedFiles.ContainsKey(fileName))
             //    return indexedFiles[fileName].ToList();
             //return null;
+
             searchFileBlockingQ.enQ(fileInfo);
         }
     }
