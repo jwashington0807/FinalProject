@@ -16,10 +16,16 @@ namespace WCF_Peer_Comm
         // used only locally so not exposed as service method
 
         [OperationContract]
-        void Search(FileInfo fileInfo);
+        void Search(FileInfo fileInfo, bool isName, bool isKey, bool isDesc);
+
+        [OperationContract]
+        void LogRecord(string user, string name, string action);
 
         [OperationContract]
         string Login(string username, string password);
+
+        [OperationContract]
+        List<string> GetAuditResults(string user, string text, bool isAdmin);
 
         FileInfo GetMessage();
     }
@@ -32,10 +38,23 @@ namespace WCF_Peer_Comm
         [DataMember]
         public string Endpoint;
 
-        public FileInfo(string newName, string newEndpoint)
+        [DataMember]
+        public string File;
+
+        [DataMember]
+        public string Description;
+
+        [DataMember]
+        public string Keywords;
+
+        public FileInfo(string newName, string fileName, string keys, string description, string newEndpoint)
         {
             Name = newName;
             Endpoint = newEndpoint;
+            File = fileName;
+            Keywords = keys;
+            Description = description;
+
         }
     }
 }

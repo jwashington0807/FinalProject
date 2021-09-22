@@ -38,6 +38,7 @@ namespace WCF_Peer_Comm
     {
         static BlockingQueue<FileInfo> newFileBlockingQ = null;
         static BlockingQueue<FileInfo> searchFileBlockingQ = null;
+
         static ConcurrentDictionary<string, ConcurrentBag<string>> indexedFiles;
         ServiceHost service = null;
 
@@ -62,9 +63,16 @@ namespace WCF_Peer_Comm
 
             file.Close();
 
-            // MessageBox.Show("The username or password that you have entered is incorrect");
-
             return role;
+        }
+
+        public void LogRecord(string user, string name, string action)
+        {
+            File.AppendAllText(@"Administration\Logs.txt", user + " - " + action + " for file " + name + Environment.NewLine);
+            /*using (StreamWriter file = new StreamWriter(@"Administration\Logs.txt"))
+            {
+                file.WriteLine(user + " - " + action + " for file " + name);
+            }*/
         }
 
         void showAll()
@@ -78,6 +86,7 @@ namespace WCF_Peer_Comm
                 }
             }
         }
+
         private void SendResponse(FileInfo fileInfo, List<string> res) {
             string endpoint = fileInfo.Endpoint;
             EndpointAddress baseAddress = new EndpointAddress(endpoint);
@@ -87,6 +96,7 @@ namespace WCF_Peer_Comm
             IPeerCommunicator channel = factory.CreateChannel();
             channel.SearchResult(res);
         }
+
         private void startSearchHandlerThread() 
         {
             Thread searchThread = new Thread(() => {
@@ -94,19 +104,70 @@ namespace WCF_Peer_Comm
                 {
                     FileInfo searchReq = GetSearchRequest();
                     Console.WriteLine(searchReq.Name + "-" + searchReq.Endpoint);
-                    List<string> res;
-                    if (indexedFiles.ContainsKey(searchReq.Name))
-                        res = indexedFiles[searchReq.Name].ToList();
-                    else
+
+                    bool found = false;
+                    List<string> res = new List<string>();
+                    string title = string.Empty;
+
+                    foreach (var file in indexedFiles)
                     {
-                        res = new List<string>();
+                        title = file.Key;
+
+                        if (searchReq.Keywords.ToLower() == "false"
+                            && searchReq.File.ToLower() == "false"
+                            && searchReq.Description.ToLower() == "false")
+                        {
+                            if(title.Contains(searchReq.Name))
+                            {
+                                res = indexedFiles[title].ToList();
+                                found = true;
+                            }
+                        }
+                        else
+                        {
+                            foreach (string value in file.Value.ToArray())
+                            {
+                                if (searchReq.File.ToLower() == "true" && value.Contains("[FILE]"))
+                                {
+                                    if (value.Contains(searchReq.Name))
+                                    {
+                                        res = indexedFiles[title].ToList();
+                                        found = true;
+                                    }
+                                }
+
+                                if (searchReq.Keywords.ToLower() == "true" && value.Contains("[KEYWORDS]"))
+                                {
+                                    if (value.Contains(searchReq.Name))
+                                    {
+                                        res = indexedFiles[title].ToList();
+                                        found = true;
+                                    }
+                                }
+
+                                if (searchReq.Description.ToLower() == "true" && value.Contains("[DESCRIPTION]"))
+                                {
+                                    if (value.Contains(searchReq.Name))
+                                    {
+                                        res = indexedFiles[title].ToList();
+                                        found = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if(!found)
+                    {
                         res.Add("Nothing was found");
                     }
+
                     SendResponse(searchReq, res);
                 }
             });
             searchThread.Start();
            }
+
         private void IndexFiles()
         {
             Thread rcvThrd = new Thread(() => {
@@ -115,22 +176,31 @@ namespace WCF_Peer_Comm
                     // get message out of receive queue - will block if queue is empty
                     FileInfo rcvdMsg = GetMessage();
                     Console.WriteLine(rcvdMsg.Name + " " + rcvdMsg.Endpoint);
+
                     if (indexedFiles.ContainsKey(rcvdMsg.Name))
                     {
                         indexedFiles[rcvdMsg.Name].Add(rcvdMsg.Endpoint);
-
                     }
                     else
                     {
                         ConcurrentBag<string> temp = new ConcurrentBag<string>();
-                        temp.Add(rcvdMsg.Endpoint);
+                        temp.Add("[ENDPOINT];" + rcvdMsg.Name + ";" + rcvdMsg.Endpoint);
+                        temp.Add("[FILE]:" + rcvdMsg.File);
+                        temp.Add("[KEYWORDS]:" + rcvdMsg.Keywords);
+                        temp.Add("[DESCRIPTION]:" + rcvdMsg.Description);
                         indexedFiles[rcvdMsg.Name] = temp;
-                    }              // call window functions on UI thread
+
+                        /*indexedFiles[rcvdMsg.Name].Add("[FILE]: " + rcvdMsg.File);
+                        indexedFiles[rcvdMsg.Name].Add("[KEYWORDS]: " + rcvdMsg.Keywords);
+                        indexedFiles[rcvdMsg.Name].Add("[DESCRIPTION]: " + rcvdMsg.Description);*/
+                    }              
+
                     showAll();
                 }
             });
             rcvThrd.Start();
         }
+
         public Receiver()
         {
             if (newFileBlockingQ == null)
@@ -149,7 +219,6 @@ namespace WCF_Peer_Comm
         }
 
         //  Create ServiceHost for Communication service
-
         public void CreateRecvChannel(string address)
         {
             WSHttpBinding binding = new WSHttpBinding();
@@ -181,13 +250,56 @@ namespace WCF_Peer_Comm
             newFileBlockingQ.enQ(fileInfo);
         }
 
-        public void Search(FileInfo fileInfo)
+        public void Search(FileInfo fileInfo, bool isName, bool isKey, bool isDesc)
         {
-            //if (indexedFiles.ContainsKey(fileName))
-            //    return indexedFiles[fileName].ToList();
-            //return null;
-
             searchFileBlockingQ.enQ(fileInfo);
+        }
+
+        public List<string> GetAuditResults(string user, string text, bool isAdmin)
+        {
+            List<string> records = new List<string>();
+
+            string line = String.Empty;
+
+            using (StreamReader file = new StreamReader(@"Administration\Logs.txt"))
+            {
+                while ((line = file.ReadLine()) != null)
+                {
+                    if (String.IsNullOrEmpty(text))
+                    {
+                        if (!isAdmin)
+                        {
+                            if (line.Contains(user))
+                            {
+                                records.Add(line);
+                            }
+                        }
+                        else
+                        {
+                            records.Add(line);
+                        }
+                    }
+                    else
+                    {
+                        if(line.Contains(text))
+                        {
+                            if (!isAdmin)
+                            {
+                                if (line.Contains(user))
+                                {
+                                    records.Add(line);
+                                }
+                            }
+                            else
+                            {
+                                records.Add(line);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return records;
         }
     }
 }

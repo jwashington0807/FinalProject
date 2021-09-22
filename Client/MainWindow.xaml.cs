@@ -32,50 +32,32 @@ namespace Client
             InitializeComponent();
         }
 
+        /*
+         Click function that will attempt to verify the user.
+         */
         private void login_click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // Set the URL for the .... client?
+                // Attempt to connect to the server
                 string endpoint = "http://localhost:8080/ICommunicator";
 
-                //From Service Model DLL
+                // From Service Model DLL
                 EndpointAddress baseAddress = new EndpointAddress(endpoint);
                 WSHttpBinding binding = new WSHttpBinding();
                 ChannelFactory<ICommunicator> factory
                   = new ChannelFactory<ICommunicator>(binding, endpoint);
                 channel = factory.CreateChannel();
 
-                if (String.IsNullOrEmpty(txtUserName.Text) || String.IsNullOrEmpty(txtPassword.Password))
-                {
+                // If the textboxes are empty, output validation message
+                // Else attempt to login with credentials
+                if (String.IsNullOrEmpty(txtUserName.Text) || String.IsNullOrEmpty(txtPassword.Password)) {
                     MessageBox.Show("Input can't be blank");
                 }
-                else
-                {
+                else {
                     string result = String.Empty;
-
                     result = channel.Login(txtUserName.Text, txtPassword.Password);
-
-                    if (String.IsNullOrEmpty(result))
-                    {
-                        MessageBox.Show("The username or password that you have entered is incorrect");
-                    }
-
-                    else
-                    {
-                        if (role == "1")
-                        {
-                            isAdmin = true;
-                        }
-                        else
-                        {
-                            isAdmin = false;
-                        }
-
-                        Tabs twdw = new Tabs(txtUserName.Text, isAdmin);
-                        twdw.Show();
-                        this.Close();
-                    }
+                    processLogin(result);
                 }
             }
             catch(Exception ex)
@@ -85,35 +67,30 @@ namespace Client
             }
         }
 
-        /*public bool Login()
+        private void processLogin(string res)
         {
-            string line = String.Empty;
-
-            StreamReader file = new StreamReader(@"C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\Administration\passwd.txt");
-            while ((line = file.ReadLine()) != null)
-            {
-                string[] ss = line.Split(':');
-
-                if (txtUserName.Text == ss[0])
-                {
-                    if (txtPassword.Password == ss[1])
-                    {
-                        role = ss[2];
-                        return true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Your password is incorrect");
-                        return false;
-                    }
-                }
+            if (String.IsNullOrEmpty(res)){
+                MessageBox.Show("The username or password that you have entered is incorrect");
             }
 
-            file.Close();
+            else
+            {
+                if (res == "1")
+                {
+                    isAdmin = true;
+                }
+                else
+                {
+                    isAdmin = false;
+                }
 
-            MessageBox.Show("The username or password that you have entered is incorrect");
+                // Open the Syracuse XAML file with the user's credential
+                Tabs twdw = new Tabs(txtUserName.Text, isAdmin);
+                twdw.Show();
 
-            return false;
-        }*/
+                // Close the MainWindow XAML
+                this.Close();
+            }
+        }
     }
 }

@@ -66,7 +66,7 @@
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Button x:Name="btn_Generate" Content="Populate" Width="160" Height="30" Margin="0,15" Click="btn_Generate_Click"/>
+                            <Button x:Name="btn_Generate" Content="Refresh" Width="160" Height="30" Margin="0,15" Click="btn_Generate_Click"/>
 
                         </Grid>
 
@@ -91,7 +91,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Content="Keys" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <ListBox x:Name="lstKeysCopy" Background="LightGray" Grid.Column="1" Width="300" Height="30" Grid.ColumnSpan="2"/>
+                            <TextBox x:Name="txtKeysCopy" Background="LightGray" Grid.Column="1" Width="300" Height="30" Grid.ColumnSpan="2"/>
 
                         </Grid>
 
@@ -113,7 +113,7 @@
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Button x:Name="btn_Copy" Content="Copy" Width="75" Height="30" Click="btn_Copy_Click"/>
+                            <Button x:Name="btn_Copy" Content="Index File" Width="160" Height="30" Click="btn_Index_Click"/>
 
                         </Grid>
                     </Grid>
@@ -177,12 +177,13 @@
                         <Grid Grid.Row="3">
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="81.333" />
+                                <ColumnDefinition Width="44.667"/>
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Files" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <ListBox x:Name="txtFileLocSearch" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="200" Width="300"/>
+                            <Label Content="Files" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125" Grid.ColumnSpan="2" Margin="0,80,0,80.667"/>
+                            <ListBox x:Name="txtFileLocSearch" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="200" Width="300" Margin="0,0,0,0.667"/>
 
                         </Grid>
 
@@ -202,8 +203,8 @@
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Progress" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="160"/>
-                            <ProgressBar x:Name="pgsDownload" Width="300px" Height="30px" Grid.Column="1" Background="Blue"/>
+                            <Label Content="Progress" Visibility="Hidden" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="160"/>
+                            <ProgressBar x:Name="pgsDownload" Visibility="Hidden" Width="300px" Height="30px" Grid.Column="1" Background="Blue"/>
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -246,36 +247,20 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Dates From" FontStyle="Italic" Grid.Column="0" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="125"/>
-                            <DatePicker x:Name="fromDatePicker" Grid.Column="1"/>
+                            <Label Content="Criteria" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="160"/>
+                            <TextBox x:Name="txtFileNameAudit" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="40" Width="400px"/>
 
-                            <Label Content="Dates To" FontStyle="Italic" Grid.Column="2" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="125"/>
-                            <DatePicker x:Name="ToDatePicker" Grid.Column="3"/>
                         </Grid>
 
                         <Grid Grid.Row="3">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="File Name" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="160"/>
-                            <TextBox x:Name="txtFileNameAudit" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="40" Width="400px"/>
-
-                        </Grid>
-
-                        <Grid Grid.Row="4">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Button x:Name="btn_Filter" Content="Filter" Width="100px" Height="30px" Margin="0,40,0,0"/>
+                            <Button x:Name="btn_Filter" Content="Load Records" Width="175px" Height="30px" Margin="0,20,0,0" Click="btn_AuditFilter_Click"/>
 
                         </Grid>
 

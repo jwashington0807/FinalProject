@@ -1,3 +1,0 @@
-﻿admin:password
-jayte:password
-mkaya:password

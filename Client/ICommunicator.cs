@@ -18,12 +18,19 @@ namespace WCF_Peer_Comm
         void Update(FileInfo fileInfo);
 
         [OperationContract]
-        void Search(FileInfo fileInfo);
+        void Search(FileInfo fileInfo, bool isName, bool isKey, bool isDesc);
+
+        [OperationContract]
+        string LogRecord(string user, string name, string action);
 
         [OperationContract]
         string Login(string username, string password);
 
+        [OperationContract]
+        List<string> GetAuditResults(string user, string text, bool isAdmin);
+
         FileInfo GetMessage();
+        
     }
     [DataContract]
     public class FileInfo
@@ -35,15 +42,21 @@ namespace WCF_Peer_Comm
         public string Endpoint;
 
         [DataMember]
+        public string File;
+
+        [DataMember]
         public string Description;
 
         [DataMember]
-        public List<string> Keywords;
+        public string Keywords;
 
-        public FileInfo(string newName, string newEndpoint)
+        public FileInfo(string newName, string fileName, string keys, string description, string newEndpoint)
         {
             Name = newName;
             Endpoint = newEndpoint;
+            File = fileName;
+            Keywords = keys;
+            Description = description;
 
         }
     }
