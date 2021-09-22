@@ -23,9 +23,9 @@
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <Label Content="URL" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="75"/>
-            <Label Name="endpointAddress" Grid.Column="1" Width="200px" FontSize="12" FontFamily="Comic Sans" Foreground="#FFF1EEEE" Height="25" />
-            <Label x:Name="userLabel" Content="User:" Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,0" FontSize="12px" Height="30" HorizontalContentAlignment="Right" Width="200"/>
+            <Label Content="URL" Grid.Column="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" FontSize="14px" Height="40" Width="75"/>
+            <Label Name="endpointAddress" Grid.Column="1" Width="275px" HorizontalContentAlignment="Left" FontSize="14" FontFamily="Comic Sans" Height="25" />
+            <Label x:Name="userLabel" Content="User:" Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,0" FontSize="12px" Height="30" HorizontalContentAlignment="Right" Width="125"/>
             <Button Name="btn_SignOut" Grid.Column="4" Content="Sign Out" VerticalAlignment="Center" HorizontalAlignment="Right" Click="btn_SignOut_Click" Width="100px" Height="30px" />
         </Grid>
 
@@ -56,7 +56,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Content="Files" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <ListBox x:Name="lstFilesCopy" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="200" Width="300" />
+                            <ListBox x:Name="lstFilesCopy" SelectionChanged="lstFilesCopy_Selected" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="200" Width="300" />
 
                         </Grid>
 
@@ -66,10 +66,10 @@
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Button x:Name="btn_Generate" Content="Populate Metadata" Width="160" Height="30" Margin="0,15" Click="btn_Generate_Click"/>
+                            <Button x:Name="btn_Generate" Content="Refresh" Width="160" Height="30" Margin="0,15" Click="btn_Generate_Click"/>
 
                         </Grid>
-                        
+
                         <Grid Grid.Row="2">
 
                             <Grid.ColumnDefinitions>
@@ -91,7 +91,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Content="Keys" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <ListBox x:Name="lstKeysCopy" Background="LightGray" Grid.Column="1" Width="300" Height="30" Grid.ColumnSpan="2"/>
+                            <TextBox x:Name="txtKeysCopy" Background="LightGray" Grid.Column="1" Width="300" Height="30" Grid.ColumnSpan="2"/>
 
                         </Grid>
 
@@ -113,13 +113,13 @@
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Button x:Name="btn_Copy" Content="Copy" Width="75" Height="30" Click="btn_Copy_Click"/>
+                            <Button x:Name="btn_Copy" Content="Index File" Width="160" Height="30" Click="btn_Index_Click"/>
 
                         </Grid>
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="Search" Background="Blue" Width="100" FontSize="16">
+                <TabItem Header="Download" Background="Blue" Width="100" FontSize="16">
                     <Grid x:Name="searchGrid" Margin="40,20,0,0">
 
                         <Grid.RowDefinitions>
@@ -136,12 +136,10 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="File" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <TextBox x:Name="txtFileLocSearch" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Height="30" Width="300"/>
-                            <Button Content="Find" Margin="20,0,0,0" Width="75" Height="30" Grid.Column="2"/>
+                            <Label Content="Criteria" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
+                            <TextBox x:Name="txtSearchCriteria1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Height="30" Width="300"/>
 
                         </Grid>
 
@@ -150,10 +148,18 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Criteria" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <TextBox x:Name="txtSearchCriteria" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Height="30" Width="300"/>
+                            <Label Content="Title" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="75"/>
+                            <CheckBox x:Name="chkTitleSearch" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="0,0,20,0"/>
+                            <Label Content="Keys" Grid.Column="2" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="75"/>
+                            <CheckBox x:Name="chkKeysSearch" Grid.Column="3" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="0,0,20,0"/>
+                            <Label Content="Description" Grid.Column="4" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="130"/>
+                            <CheckBox x:Name="chkDescSearch" Grid.Column="5" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="0,0,20,0"/>
 
                         </Grid>
 
@@ -161,89 +167,27 @@
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="54*"/>
+                                <ColumnDefinition Width="97*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Title" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <CheckBox x:Name="chkTitleSearch" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left"/>
-
+                            <Button x:Name="btn_Search" Content="Search" Width="100px" Height="30px" Click="btn_Search_Click" Margin="0,0,0,0.667"/>
                         </Grid>
 
                         <Grid Grid.Row="3">
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="81.333" />
+                                <ColumnDefinition Width="44.667"/>
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Keys" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <CheckBox x:Name="chkKeysSearch" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left"/>
+                            <Label Content="Files" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125" Grid.ColumnSpan="2" Margin="0,80,0,80.667"/>
+                            <ListBox x:Name="txtFileLocSearch" Grid.Column="2" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="200" Width="300" Margin="0,0,0,0.667"/>
 
                         </Grid>
 
                         <Grid Grid.Row="4">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Label Content="Description" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="125"/>
-                            <CheckBox x:Name="chkDescSearch" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left"/>
-
-                        </Grid>
-
-                        <Grid Grid.Row="5">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Button x:Name="btn_Search" Content="Search" Width="100px" Height="40px" Click="btn_Search_Click"/>
-                        </Grid>
-
-                    </Grid>
-                </TabItem>
-
-                <TabItem Header="Download" Background="Blue" Width="100" FontSize="16">
-                    <Grid x:Name="downloadGrid" Margin="40,20,0,0">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Row="0">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Label Content="File Location" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="160"/>
-                            <TextBox x:Name="txtFolderLocation" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Height="30" Width="300"/>
-                            <Button Content="Load" Width="75" Height="30" Margin="10,0,0,0" Grid.Column="2"/>
-
-                        </Grid>
-
-                        <Grid Grid.Row="1">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="12*"/>
-                                <ColumnDefinition Width="35*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Content="Size" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="160"/>
-                            <ListBox x:Name="lstDownload" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="30" Width="300" Margin="0,5,0,5"/>
-
-                        </Grid>
-
-                        <Grid Grid.Row="2">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -252,17 +196,16 @@
                             <Button x:Name="btn_Download" Content="Download" Width="100px" Height="30px" Click="btn_Download_Click"/>
                         </Grid>
 
-                        <Grid Grid.Row="3">
+                        <Grid Grid.Row="5">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Progress" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="160"/>
-                            <ProgressBar x:Name="pgsDownload" Width="300px" Height="30px" Grid.Column="1" Background="Blue"/>
+                            <Label Content="Progress" Visibility="Hidden" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="160"/>
+                            <ProgressBar x:Name="pgsDownload" Visibility="Hidden" Width="300px" Height="30px" Grid.Column="1" Background="Blue"/>
                         </Grid>
-
                     </Grid>
                 </TabItem>
 
@@ -304,36 +247,20 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Dates From" FontStyle="Italic" Grid.Column="0" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="125"/>
-                            <DatePicker x:Name="fromDatePicker" Grid.Column="1"/>
+                            <Label Content="Criteria" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="160"/>
+                            <TextBox x:Name="txtFileNameAudit" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="40" Width="400px"/>
 
-                            <Label Content="Dates To" FontStyle="Italic" Grid.Column="2" HorizontalAlignment="Center" FontSize="20px" Height="40" Width="125"/>
-                            <DatePicker x:Name="ToDatePicker" Grid.Column="3"/>
                         </Grid>
 
                         <Grid Grid.Row="3">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="File Name" Grid.Column="0" HorizontalAlignment="Left" FontSize="20px" Height="40" Width="160"/>
-                            <TextBox x:Name="txtFileNameAudit" Grid.Column="1" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="40" Width="400px"/>
-
-                        </Grid>
-
-                        <Grid Grid.Row="4">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Button x:Name="btn_Filter" Content="Filter" Width="100px" Height="30px" Margin="0,40,0,0"/>
+                            <Button x:Name="btn_Filter" Content="Load Records" Width="175px" Height="30px" Margin="0,20,0,0" Click="btn_AuditFilter_Click"/>
 
                         </Grid>
 
@@ -350,8 +277,6 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="msgTextBox" Visibility="Hidden" HorizontalAlignment="Left" Height="46" TextWrapping="Wrap" Text="fileName" VerticalAlignment="Top" Width="320" Grid.Column="1"/>
-            
         </Grid>
 
     </Grid>

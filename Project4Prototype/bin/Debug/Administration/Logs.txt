@@ -1,0 +1,11 @@
+admin - Indexed for file test - Copy.txt
+admin - Indexed for file test.txt
+mkaya - Indexed for file Client.exe
+jaytee - Indexed for file Client.exe
+admin - Indexed for file testing.txt
+mkaya - Downloaded for file testing.txt
+admin - Indexed for file kaya.txt
+mkaya - Downloaded for file kaya.txt
+mkaya - Indexed for file Yay.txt
+admin - Downloaded for file kaya.txt
+admin - Downloaded for file Yay.txt

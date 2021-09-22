@@ -23,29 +23,41 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        int role = 0;
+        string role = String.Empty;
+        bool isAdmin = false;
+        ICommunicator channel;
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        /*
+         Click function that will attempt to verify the user.
+         */
         private void login_click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (String.IsNullOrEmpty(txtUserName.Text) || String.IsNullOrEmpty(txtPassword.Password))
-                {
+                // Attempt to connect to the server
+                string endpoint = "http://localhost:8080/ICommunicator";
+
+                // From Service Model DLL
+                EndpointAddress baseAddress = new EndpointAddress(endpoint);
+                WSHttpBinding binding = new WSHttpBinding();
+                ChannelFactory<ICommunicator> factory
+                  = new ChannelFactory<ICommunicator>(binding, endpoint);
+                channel = factory.CreateChannel();
+
+                // If the textboxes are empty, output validation message
+                // Else attempt to login with credentials
+                if (String.IsNullOrEmpty(txtUserName.Text) || String.IsNullOrEmpty(txtPassword.Password)) {
                     MessageBox.Show("Input can't be blank");
                 }
-                else
-                {
-                    if (Login())
-                    {
-                        Tabs twdw = new Tabs(txtUserName.Text);
-                        twdw.Show();
-                        this.Close();
-                    }
+                else {
+                    string result = String.Empty;
+                    result = channel.Login(txtUserName.Text, txtPassword.Password);
+                    processLogin(result);
                 }
             }
             catch(Exception ex)
@@ -55,36 +67,30 @@ namespace Client
             }
         }
 
-        public bool Login()
+        private void processLogin(string res)
         {
-            string line = String.Empty;
-
-            StreamReader file = new StreamReader(@"C:\Users\JT\source\repos\Project4Prototype\Project4Prototype\Project4Prototype\Administration\passwd.txt");
-            while ((line = file.ReadLine()) != null)
-            {
-                string[] ss = line.Split(':');
-
-                if (txtUserName.Text == ss[0])
-                {
-                    if (txtPassword.Password == ss[1])
-                    {
-                        role = ss[2];
-                        return true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Your password is incorrect");
-
-                        return false;
-                    }
-                }
+            if (String.IsNullOrEmpty(res)){
+                MessageBox.Show("The username or password that you have entered is incorrect");
             }
 
-            file.Close();
+            else
+            {
+                if (res == "1")
+                {
+                    isAdmin = true;
+                }
+                else
+                {
+                    isAdmin = false;
+                }
 
-            MessageBox.Show("The username or password that you have entered is incorrect");
+                // Open the Syracuse XAML file with the user's credential
+                Tabs twdw = new Tabs(txtUserName.Text, isAdmin);
+                twdw.Show();
 
-            return false;
+                // Close the MainWindow XAML
+                this.Close();
+            }
         }
     }
 }
